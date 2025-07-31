@@ -1,7 +1,5 @@
 package src.model;
 
-import java.util.List;
-
 /**
  * NOVO MODELO: Representa o conjunto de avaliações de um único usuário.
  * Armazena múltiplos comentários e notas para calcular uma média.

@@ -1,7 +1,5 @@
 package src.model;
 
-import src.model.exception.InvalidLoginException;
-
 public class User {
     private final String login;
     private final String password;
