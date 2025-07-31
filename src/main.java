@@ -1,15 +1,26 @@
 package src;
 
+import src.controller.ReviewController;
 import src.controller.UserController;
-import src.service.UserService;
+import src.model.User;
+import src.service.RAMReviewRepository;
+import src.service.RAMUserRepository;
+import src.service.ReviewRepository;
+import src.service.UserRepository;
+import src.view.ReviewView;
 import src.view.UserView;
 import java.util.Scanner;
 
 public class main {
     public static void main(String[] args) {
-        UserController controller = new UserController();
-        UserView view = new UserView();
-        UserService service = new UserService(controller, view);
+        UserRepository userRepository = new RAMUserRepository();
+        UserController userController = new UserController(userRepository);
+        UserView userView = new UserView(userController);
+
+        ReviewRepository reviewRepository = new RAMReviewRepository();
+        ReviewController reviewController = new ReviewController(reviewRepository);
+        ReviewView reviewView = new ReviewView(reviewController);
+
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
 
@@ -29,12 +40,17 @@ public class main {
             try {
                 int option = Integer.parseInt(scanner.nextLine());
                 switch (option) {
-                    case 1: service.gerenciarCadastroUsuario(scanner); break;
-                    case 2: service.gerenciarDeixarAvaliacao(scanner); break;
-                    case 3: service.gerenciarVerPainelDeAvaliacoes(); break;
-                    case 4: service.gerenciarListagemUsuariosAtivos(); break;
-                    case 5: service.gerenciarListagemUsuariosExcluidos(); break;
-                    case 6: service.gerenciarExclusaoUsuario(scanner); break;
+                    case 1: userView.manageUserCreation(scanner); break;
+                    case 2: {
+                        User user = userView.authenticate(scanner);
+                        if(user == null) break;
+                        reviewView.manageLeaveReview(scanner, user);
+                        break;
+                    }
+                    case 3: reviewView.manageViewReviewPanel(); break;
+                    case 4: userView.manageActiveUsersList(); break;
+                    case 5: userView.manageDeletedUsersList(); break;
+                    case 6: userView.manageUserDeletion(scanner); break;
                     case 0: running = false; break;
                     default: System.out.println("Opção inválida!"); break;
                 }

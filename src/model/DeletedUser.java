@@ -1,17 +1,15 @@
 package src.model;
 
-public class DeletedUser {
-    private User originalUser;
-    private String justificativaExclusao;
-    private int notaExclusao;
+public class DeletedUser extends User {
+    private final String deletionJustification;
+    private final int deletionRating;
 
     public DeletedUser(User originalUser, String justification, int rating) {
-        this.originalUser = originalUser;
-        this.justificativaExclusao = justification;
-        this.notaExclusao = rating;
+        super(originalUser.getLogin(), originalUser.getPassword());
+        this.deletionJustification = justification;
+        this.deletionRating = rating;
     }
 
-    public User getOriginalUser() { return originalUser; }
-    public String getJustificativaExclusao() { return justificativaExclusao; }
-    public int getNotaExclusao() { return notaExclusao; }
+    public String getDeletionJustification() { return deletionJustification; }
+    public int getDeletionRating() { return deletionRating; }
 }
