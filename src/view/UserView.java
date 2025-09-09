@@ -68,12 +68,10 @@ public class UserView {
 
         System.out.println("\nATENÇÃO: Você tem certeza que deseja excluir o usuário '" + userToDelete.getLogin() + "'?");
         System.out.println("Esta ação é permanente e não pode ser desfeita.");
-        System.out.print("Digite 'sim' para confirmar ou qualquer outra coisa para cancelar: ");
+        System.out.print("Digite 's' para confirmar ou qualquer outra coisa para cancelar: ");
         String confirmation = scanner.nextLine();
 
-        final Set<String> yesOptions = new HashSet<>(Arrays.asList("sim", "Sim", "SIM", "s", "S"));
-
-        if (!yesOptions.contains(confirmation)) {
+        if (!confirmation.equals("s")) {
             System.out.println("\nOperação de exclusão cancelada pelo usuário.");
             return;
         }
@@ -128,7 +126,7 @@ public class UserView {
     }
 
     private void printDeletedUserDetails(DeletedUser deletedUser) {
-        System.out.println("Login: " + deletedUser.getLogin());
+        System.out.println("Login: " + deletedUser.getOriginalUser().getLogin());
         String justification = deletedUser.getDeletionJustification();
         if (justification != null && !justification.isEmpty()) {
             System.out.println("Justificativa da Exclusão: " + justification);

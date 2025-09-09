@@ -57,7 +57,7 @@ public class UserController {
         }
     }
     
-    public List<User> getActiveUsers() {
+    public List<User> getActiveUsers(){
         return userRepository.getAllActiveUsers();
     }
     public List<DeletedUser> getDeletedUsers() {

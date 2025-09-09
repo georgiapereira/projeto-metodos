@@ -7,29 +7,46 @@ import src.service.RAMReviewRepository;
 import src.service.RAMUserRepository;
 import src.service.ReviewRepository;
 import src.service.UserRepository;
+import src.service.files.FileReviewRepository;
+import src.service.files.FileUserRepository;
 import src.view.ReviewView;
 import src.view.UserView;
+
 import java.util.Scanner;
 
 public class main {
     public static void main(String[] args) {
-        UserRepository userRepository = new RAMUserRepository();
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("### Aplicação de Gerenciamento e Feedback Iniciada ###");
+        System.out.println("\nIniciando em modo de persistência de arquivo, deseja trocar para o modo de persistência em RAM?");
+        System.out.print("Digite 's' para aceitar ou qualquer outra coisa para prosseguir com modo arquivo: ");
+        String confirmation = scanner.nextLine();
+
+        ReviewRepository reviewRepository;
+        UserRepository userRepository;
+
+        if (confirmation.equals("s")) {
+            reviewRepository = new RAMReviewRepository();
+            userRepository = new RAMUserRepository();
+        } else {
+            reviewRepository = new FileReviewRepository();
+            userRepository = new FileUserRepository();
+        }
+
         UserController userController = new UserController(userRepository);
         UserView userView = new UserView(userController);
 
-        ReviewRepository reviewRepository = new RAMReviewRepository();
+
         ReviewController reviewController = new ReviewController(reviewRepository);
         ReviewView reviewView = new ReviewView(reviewController);
 
-        Scanner scanner = new Scanner(System.in);
         boolean running = true;
-
-        System.out.println("### Aplicação de Gerenciamento e Feedback Iniciada ###");
 
         while (running) {
             System.out.println("\n===== MENU DE OPÇÕES =====");
             System.out.println("1. Cadastrar Novo Usuário");
-            System.out.println("2. Deixar uma Avaliação"); 
+            System.out.println("2. Deixar uma Avaliação");
             System.out.println("3. Ver Painel de Avaliações");
             System.out.println("4. Listar Usuários Ativos");
             System.out.println("5. Listar Usuários Excluídos");
@@ -40,19 +57,33 @@ public class main {
             try {
                 int option = Integer.parseInt(scanner.nextLine());
                 switch (option) {
-                    case 1: userView.manageUserCreation(scanner); break;
+                    case 1:
+                        userView.manageUserCreation(scanner);
+                        break;
                     case 2: {
                         User user = userView.authenticate(scanner);
-                        if(user == null) break;
+                        if (user == null) break;
                         reviewView.manageLeaveReview(scanner, user);
                         break;
                     }
-                    case 3: reviewView.manageViewReviewPanel(); break;
-                    case 4: userView.manageActiveUsersList(); break;
-                    case 5: userView.manageDeletedUsersList(); break;
-                    case 6: userView.manageUserDeletion(scanner); break;
-                    case 0: running = false; break;
-                    default: System.out.println("Opção inválida!"); break;
+                    case 3:
+                        reviewView.manageViewReviewPanel();
+                        break;
+                    case 4:
+                        userView.manageActiveUsersList();
+                        break;
+                    case 5:
+                        userView.manageDeletedUsersList();
+                        break;
+                    case 6:
+                        userView.manageUserDeletion(scanner);
+                        break;
+                    case 0:
+                        running = false;
+                        break;
+                    default:
+                        System.out.println("Opção inválida!");
+                        break;
                 }
             } catch (NumberFormatException e) {
                 System.out.println("ERRO: Por favor, digite um número.");

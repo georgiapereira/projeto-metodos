@@ -57,8 +57,9 @@ public class RAMUserRepository implements UserRepository {
         }
 
         for (DeletedUser deletedUser : deletedUsers) {
-            if (deletedUser.getLogin().equals(login) && deletedUser.getPassword().equals(password)) {
-                return deletedUser;
+            User originalUser = deletedUser.getOriginalUser();
+            if (originalUser.getLogin().equals(login) && originalUser.getPassword().equals(password)) {
+                return originalUser;
             }
         }
 

@@ -5,6 +5,7 @@ import src.service.ReviewRepository;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ReviewController {
     private final ReviewRepository reviewRepository;
@@ -18,7 +19,7 @@ public class ReviewController {
         reviewRepository.addReview(review);
     }
 
-    public HashMap<String, List<Review>> getAllReviews() {
+    public Map<String, List<Review>> getAllReviews() {
         return reviewRepository.getAllReviews();
     }
 

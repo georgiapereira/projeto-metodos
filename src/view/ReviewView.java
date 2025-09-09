@@ -48,7 +48,7 @@ public class ReviewView {
         printReviewPanel(reviewController.getAllReviews());
     }
 
-    private void printReviewPanel(HashMap<String, List<Review>> reviews) {
+    private void printReviewPanel(Map<String, List<Review>> reviews) {
         System.out.println("\n--- PAINEL DE AVALIAÇÕES DO SERVIÇO ---");
         if (reviews.isEmpty()) {
             System.out.println("Nenhuma avaliação foi feita ainda.");
