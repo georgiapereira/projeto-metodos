@@ -5,12 +5,13 @@ import src.model.Review;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RAMReviewRepository implements ReviewRepository {
     private final HashMap<String, List<Review>> reviews = new HashMap<>();
 
     @Override
-    public HashMap<String, List<Review>> getAllReviews() {
+    public Map<String, List<Review>> getAllReviews() {
         return reviews;
     }
 

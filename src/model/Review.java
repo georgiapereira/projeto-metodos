@@ -1,10 +1,13 @@
 package src.model;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * NOVO MODELO: Representa o conjunto de avaliações de um único usuário.
  * Armazena múltiplos comentários e notas para calcular uma média.
  */
-public class Review {
+public class Review implements Serializable {
     private final String userLogin;
     private final String comment;
     private final int rating;
