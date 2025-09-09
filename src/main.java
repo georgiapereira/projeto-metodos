@@ -1,8 +1,8 @@
 package src;
 
+import src.controller.ControllerFacadeSingleton;
 import src.controller.ReviewController;
 import src.controller.UserController;
-import src.model.User;
 import src.service.RAMReviewRepository;
 import src.service.RAMUserRepository;
 import src.service.ReviewRepository;
@@ -35,11 +35,13 @@ public class main {
         }
 
         UserController userController = new UserController(userRepository);
-        UserView userView = new UserView(userController);
-
-
         ReviewController reviewController = new ReviewController(reviewRepository);
-        ReviewView reviewView = new ReviewView(reviewController);
+
+        ControllerFacadeSingleton.setInstance(reviewController, userController);
+        ControllerFacadeSingleton controllerFacade = ControllerFacadeSingleton.getInstance();
+
+        UserView userView = new UserView();
+        ReviewView reviewView = new ReviewView();
 
         boolean running = true;
 
@@ -51,6 +53,7 @@ public class main {
             System.out.println("4. Listar Usuários Ativos");
             System.out.println("5. Listar Usuários Excluídos");
             System.out.println("6. Excluir um Usuário");
+            System.out.println("7. Mostrar número total de entidades cadastradas");
             System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
 
@@ -61,9 +64,7 @@ public class main {
                         userView.manageUserCreation(scanner);
                         break;
                     case 2: {
-                        User user = userView.authenticate(scanner);
-                        if (user == null) break;
-                        reviewView.manageLeaveReview(scanner, user);
+                        reviewView.manageLeaveReview(scanner);
                         break;
                     }
                     case 3:
@@ -77,6 +78,9 @@ public class main {
                         break;
                     case 6:
                         userView.manageUserDeletion(scanner);
+                        break;
+                    case 7:
+                        System.out.printf("\nNúmero total de entidades cadastradas no sistema: %d\n", controllerFacade.getNumberOfEntities());
                         break;
                     case 0:
                         running = false;

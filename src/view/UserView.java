@@ -1,32 +1,13 @@
 package src.view;
 
-import src.controller.UserController;
+import src.controller.ControllerFacadeSingleton;
 import src.model.DeletedUser;
 import src.model.User;
 
 import java.util.*;
 
 public class UserView {
-    private final UserController userController;
-
-    public UserView(UserController userController) {
-        this.userController = userController;
-    }
-
-    public User authenticate(Scanner scanner) {
-        System.out.println("--- Autenticação de Usuário ---");
-        System.out.print("Por favor, digite seu login: ");
-        String login = scanner.nextLine();
-        System.out.print("Agora, digite sua senha: ");
-        String password = scanner.nextLine();
-
-        User user = userController.authenticateWithCredentials(login, password);
-        if (user != null){
-            System.out.println("\nUsuário '" + user.getLogin() + "' autenticado." );
-        }
-
-        return user;
-    }
+    private final ControllerFacadeSingleton controllerFacade = ControllerFacadeSingleton.getInstance();
 
     public void manageUserCreation(Scanner scanner) {
         System.out.println("\n--- Cadastro de Novo Usuário ---");
@@ -38,7 +19,7 @@ public class UserView {
         System.out.println("----------------------------------------");
         System.out.println(">>> Processando a requisição de cadastro...");
 
-        User newUser = userController.addUser(login, password);
+        User newUser = controllerFacade.addUser(login, password);
         if (newUser != null) {
             printUserDetails(newUser);
         }
@@ -47,11 +28,11 @@ public class UserView {
     }
 
     public void manageActiveUsersList() {
-        printAllUsers(userController.getActiveUsers());
+        printAllUsers(controllerFacade.getActiveUsers());
     }
 
     public void manageDeletedUsersList() {
-        printAllDeletedUsers(userController.getDeletedUsers());
+        printAllDeletedUsers(controllerFacade.getDeletedUsers());
     }
 
     public void manageUserDeletion(Scanner scanner) {
@@ -61,7 +42,7 @@ public class UserView {
         System.out.print("Digite a senha: ");
         String password = scanner.nextLine();
 
-        User userToDelete = userController.authenticateWithCredentials(login, password);
+        User userToDelete = controllerFacade.authenticateWithCredentials(login, password);
         if (userToDelete == null) {
             return;
         }
@@ -103,7 +84,7 @@ public class UserView {
             }
         }
 
-        userController.deleteUser(userToDelete, justification, rating);
+        controllerFacade.deleteUser(userToDelete, justification, rating);
 
         System.out.println("----------------------------------------");
     }

@@ -1,23 +1,24 @@
 package src.view;
 
-import src.controller.ReviewController;
+import src.controller.ControllerFacadeSingleton;
 import src.model.Review;
 import src.model.User;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 public class ReviewView {
-    private final ReviewController reviewController;
+    private final ControllerFacadeSingleton controllerFacade = ControllerFacadeSingleton.getInstance();
 
-    public ReviewView(ReviewController reviewController) {
-        this.reviewController = reviewController;
-    }
-
-    public void manageLeaveReview(Scanner scanner, User user) {
+    public void manageLeaveReview(Scanner scanner) {
         System.out.println("\n--- Deixar uma Avaliação ---");
+
+        User user = authenticate(scanner);
+
+        if(user == null){
+            return;
+        }
 
         System.out.println("\nPor favor, faça sua avaliação. Os campos são obrigatórios.");
         String comment;
@@ -40,12 +41,12 @@ public class ReviewView {
         } while (nota < 0 || nota > 5);
 
 
-        reviewController.addReview(user.getLogin(), comment, nota);
+        controllerFacade.addReview(user.getLogin(), comment, nota);
         System.out.println("Obrigado! Sua avaliação foi registrada com sucesso.");
     }
 
     public void manageViewReviewPanel() {
-        printReviewPanel(reviewController.getAllReviews());
+        printReviewPanel(controllerFacade.getAllReviews());
     }
 
     private void printReviewPanel(Map<String, List<Review>> reviews) {
@@ -81,5 +82,20 @@ public class ReviewView {
                 .mapToInt(Integer::intValue)
                 .average()
                 .orElse(0.0);
+    }
+
+    private User authenticate(Scanner scanner) {
+        System.out.println("--- Autenticação de Usuário ---");
+        System.out.print("Por favor, digite seu login: ");
+        String login = scanner.nextLine();
+        System.out.print("Agora, digite sua senha: ");
+        String password = scanner.nextLine();
+
+        User user = controllerFacade.authenticateWithCredentials(login, password);
+        if (user != null){
+            System.out.println("\nUsuário '" + user.getLogin() + "' autenticado." );
+        }
+
+        return user;
     }
 }
