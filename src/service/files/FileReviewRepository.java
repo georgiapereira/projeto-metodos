@@ -2,6 +2,8 @@ package src.service.files;
 
 import src.model.Review;
 import src.service.ReviewRepository;
+import src.util.LogManager;
+import src.util.Logger;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -14,6 +16,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class FileReviewRepository implements ReviewRepository {
+    private final Logger logger = LogManager.getLogger();
     private final String path = "db/review.ser";
 
     @Override
@@ -43,7 +46,8 @@ public class FileReviewRepository implements ReviewRepository {
             objectOutputStream.flush();
             objectOutputStream.close();
         } catch (Exception e) {
-            throw new RuntimeException("Falha na criação de arquivo");
+            logger.error("Erro de escrita de arquivo", e);
+            throw new RuntimeException("Falha na criação de arquivo", e);
         }
     }
 }

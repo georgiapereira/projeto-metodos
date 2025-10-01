@@ -5,12 +5,15 @@ import src.model.User;
 import src.model.exception.UserException;
 import src.model.exception.UserNotFoundException;
 import src.service.UserRepository;
+import src.util.LogManager;
+import src.util.Logger;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FileUserRepository implements UserRepository {
+    private final Logger logger = LogManager.getLogger();
     private final String userPath = "db/user.ser";
     private final String deletedUserPath = "db/deleted-user.ser";
 
@@ -24,6 +27,7 @@ public class FileUserRepository implements UserRepository {
         } catch (FileNotFoundException e) {
             return new ArrayList<>();
         } catch (Exception e) {
+            logger.error("Erro de leitura de arquivo", e);
             throw new RuntimeException(e);
         }
     }
@@ -38,6 +42,7 @@ public class FileUserRepository implements UserRepository {
         } catch (FileNotFoundException e) {
             return new ArrayList<>();
         } catch (Exception e) {
+            logger.error("Erro de leitura de arquivo", e);
             throw new RuntimeException(e);
         }
     }
@@ -59,6 +64,7 @@ public class FileUserRepository implements UserRepository {
             objectOutputStream.flush();
             objectOutputStream.close();
         } catch (Exception e) {
+            logger.error("Erro de escrita de arquivo", e);
             throw new RuntimeException("Falha na criação de arquivo", e);
         }
     }
@@ -74,6 +80,7 @@ public class FileUserRepository implements UserRepository {
             objectOutputStream.flush();
             objectOutputStream.close();
         } catch (Exception e) {
+            logger.error("Erro de escrita de arquivo", e);
             throw new RuntimeException("Falha na criação de arquivo");
         }
 
@@ -88,6 +95,7 @@ public class FileUserRepository implements UserRepository {
             objectOutputStream.flush();
             objectOutputStream.close();
         } catch (Exception e) {
+            logger.error("Erro de escrita de arquivo", e);
             throw new RuntimeException("Falha na criação de arquivo");
         }
     }

@@ -9,6 +9,8 @@ import src.service.ReviewRepository;
 import src.service.UserRepository;
 import src.service.files.FileReviewRepository;
 import src.service.files.FileUserRepository;
+import src.util.LogManager;
+import src.util.Logger;
 import src.view.ReviewView;
 import src.view.UserView;
 
@@ -17,6 +19,8 @@ import java.util.Scanner;
 public class main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        Logger logger = LogManager.getLogger();
+        logger.info("Aplicação iniciada");
 
         System.out.println("### Aplicação de Gerenciamento e Feedback Iniciada ###");
         System.out.println("\nIniciando em modo de persistência de arquivo, deseja trocar para o modo de persistência em RAM?");
@@ -94,5 +98,6 @@ public class main {
             }
         }
         scanner.close();
+        logger.info("Aplicação encerrada");
     }
 }
