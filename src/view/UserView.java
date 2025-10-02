@@ -19,7 +19,7 @@ public class UserView {
         System.out.println("----------------------------------------");
         System.out.println(">>> Processando a requisição de cadastro...");
 
-        User newUser = controllerFacade.addUser(login, password);
+        User newUser = (User) controllerFacade.execute("addUser", login, password);
         if (newUser != null) {
             printUserDetails(newUser);
         }
@@ -28,11 +28,13 @@ public class UserView {
     }
 
     public void manageActiveUsersList() {
-        printAllUsers(controllerFacade.getActiveUsers());
+        List<User> users = (List<User>) controllerFacade.execute("getActiveUsers");
+        printAllUsers(users);
     }
 
     public void manageDeletedUsersList() {
-        printAllDeletedUsers(controllerFacade.getDeletedUsers());
+        List<DeletedUser> users = (List<DeletedUser>) controllerFacade.execute("getDeletedUsers");
+        printAllDeletedUsers(users);
     }
 
     public void manageUserDeletion(Scanner scanner) {
@@ -42,7 +44,7 @@ public class UserView {
         System.out.print("Digite a senha: ");
         String password = scanner.nextLine();
 
-        User userToDelete = controllerFacade.authenticateWithCredentials(login, password);
+        User userToDelete = (User) controllerFacade.execute("login", login, password);
         if (userToDelete == null) {
             return;
         }
@@ -84,7 +86,7 @@ public class UserView {
             }
         }
 
-        controllerFacade.deleteUser(userToDelete, justification, rating);
+        controllerFacade.execute("deleteUser", userToDelete, justification, rating);
 
         System.out.println("----------------------------------------");
     }

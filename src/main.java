@@ -84,7 +84,8 @@ public class main {
                         userView.manageUserDeletion(scanner);
                         break;
                     case 7:
-                        System.out.printf("\nNúmero total de entidades cadastradas no sistema: %d\n", controllerFacade.getNumberOfEntities());
+                        int nEntities = (int) controllerFacade.execute("getNumberOfEntities");
+                        System.out.printf("\nNúmero total de entidades cadastradas no sistema: %d\n", nEntities);
                         break;
                     case 0:
                         running = false;

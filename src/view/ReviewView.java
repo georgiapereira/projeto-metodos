@@ -16,7 +16,7 @@ public class ReviewView {
 
         User user = authenticate(scanner);
 
-        if(user == null){
+        if (user == null) {
             return;
         }
 
@@ -41,12 +41,13 @@ public class ReviewView {
         } while (nota < 0 || nota > 5);
 
 
-        controllerFacade.addReview(user.getLogin(), comment, nota);
+        controllerFacade.execute("addReview", user.getLogin(), comment, nota);
         System.out.println("Obrigado! Sua avaliação foi registrada com sucesso.");
     }
 
     public void manageViewReviewPanel() {
-        printReviewPanel(controllerFacade.getAllReviews());
+        Map<String, List<Review>> reviews = (Map<String, List<Review>>) controllerFacade.execute("getAllReviews");
+        printReviewPanel(reviews);
     }
 
     private void printReviewPanel(Map<String, List<Review>> reviews) {
@@ -70,6 +71,7 @@ public class ReviewView {
 
     /**
      * Calcula a média de todas as notas recebidas.
+     *
      * @return A média das notas ou 0 se não houver notas.
      */
     public Double getRatingAverage(List<Review> reviews) {
@@ -91,9 +93,9 @@ public class ReviewView {
         System.out.print("Agora, digite sua senha: ");
         String password = scanner.nextLine();
 
-        User user = controllerFacade.authenticateWithCredentials(login, password);
-        if (user != null){
-            System.out.println("\nUsuário '" + user.getLogin() + "' autenticado." );
+        User user = (User) controllerFacade.execute("login", login, password);
+        if (user != null) {
+            System.out.println("\nUsuário '" + user.getLogin() + "' autenticado.");
         }
 
         return user;
