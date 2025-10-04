@@ -9,11 +9,16 @@ public class AddReviewCommand implements Command{
     }
 
     @Override
+    public boolean doesUpdate(){
+        return true;
+    }
+
+    @Override
     public Object execute(Object... args) {
         String userLogin = (String) args[0];
         String comment = (String) args[1];
         int rating = (int) args[2];
         reviewController.addReview(userLogin, comment, rating);
-        return this;
+        return null;
     }
 }

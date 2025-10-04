@@ -18,8 +18,20 @@ public class RAMUserRepository implements UserRepository {
     }
 
     @Override
+    public void setActiveUsers(List<User> activeUsers) {
+        this.activeUsers.clear();
+        this.activeUsers.addAll(activeUsers);
+    }
+
+    @Override
     public List<DeletedUser> getAllDeletedUsers() {
         return deletedUsers;
+    }
+
+    @Override
+    public void setDeletedUsers(List<DeletedUser> deletedUsers) {
+        this.deletedUsers.clear();
+        this.deletedUsers.addAll(deletedUsers);
     }
 
     @Override

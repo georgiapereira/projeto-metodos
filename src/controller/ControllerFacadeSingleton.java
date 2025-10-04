@@ -1,12 +1,8 @@
 package src.controller;
 
 import src.controller.command.*;
-import src.model.DeletedUser;
-import src.model.Review;
-import src.model.User;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ControllerFacadeSingleton {
@@ -30,6 +26,7 @@ public class ControllerFacadeSingleton {
         cmds.put("getActiveUsers", new GetActiveUsersCommand(userController));
         cmds.put("getDeletedUsers", new GetDeletedUsersCommand(userController));
         cmds.put("getNumberOfEntities", new GetNumberOfEntitiesCommand(userController, reviewController));
+        cmds.put("undo", new UndoCommand(userController, reviewController));
     }
 
     private static ControllerFacadeSingleton instance;
@@ -49,12 +46,22 @@ public class ControllerFacadeSingleton {
  * "getAllReviews" <br> returns: Map (String -> [Review])<p>
  * "login" <br> returns: User <br> args: login:String password:String<p>
  * "deleteUser" <br> args: user:User justification:String rating:String<p>
- * "getAllActiveUsers" returns: [User]<p>
- * "getAllDeletedUsers" returns: [DeletedUser]<p>
- * "getNumberOfEntities" returns: int<p>
+ * "getAllActiveUsers" <br> returns: [User]<p>
+ * "getAllDeletedUsers" <br> returns: [DeletedUser]<p>
+ * "getNumberOfEntities" <br> returns: int<p>
+ * "undo" <br> returns: boolean
 */
     public Object execute(String cmd, Object... args) {
         Command c = cmds.get(cmd);
-        return c.execute(args);
+        if(c.doesUpdate()){
+            saveMementos();
+        }
+        Object result = c.execute(args);
+        return result;
+    }
+
+    private void saveMementos(){
+        userController.save();
+        reviewController.save();
     }
 }

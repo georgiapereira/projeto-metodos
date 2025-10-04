@@ -9,6 +9,11 @@ public class AddUserCommand implements Command{
     }
 
     @Override
+    public boolean doesUpdate(){
+        return true;
+    }
+
+    @Override
     public Object execute(Object... args) {
         String login = (String) args[0];
         String password = (String) args[1];

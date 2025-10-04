@@ -24,6 +24,16 @@ public class FileReviewRepository implements ReviewRepository {
         return getReviewList().stream().collect(Collectors.groupingBy(Review::getUserLogin));
     }
 
+    @Override
+    public void setReviews(Map<String, List<Review>> reviews) {
+        List<Review> reviewList = reviews
+                .values()
+                .stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+        setReviewList(reviewList);
+    }
+
     private List<Review> getReviewList() {
         try (FileInputStream fileInputStream = new FileInputStream(path)) {
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
@@ -36,18 +46,22 @@ public class FileReviewRepository implements ReviewRepository {
         }
     }
 
-    @Override
-    public void addReview(Review review) {
-        List<Review> allReviews = getReviewList();
-        allReviews.add(review);
+    private void setReviewList(List<Review> reviews) {
         try (FileOutputStream fileOutputStream = new FileOutputStream(path)) {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(allReviews);
+            objectOutputStream.writeObject(reviews);
             objectOutputStream.flush();
             objectOutputStream.close();
         } catch (Exception e) {
             logger.error("Erro de escrita de arquivo", e);
             throw new RuntimeException("Falha na criação de arquivo", e);
         }
+    }
+
+    @Override
+    public void addReview(Review review) {
+        List<Review> allReviews = getReviewList();
+        allReviews.add(review);
+        setReviewList(allReviews);
     }
 }

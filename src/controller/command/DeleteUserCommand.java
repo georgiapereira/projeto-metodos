@@ -10,6 +10,11 @@ public class DeleteUserCommand implements Command{
     }
 
     @Override
+    public boolean doesUpdate() {
+        return true;
+    }
+
+    @Override
     public Object execute(Object... args) {
         User user = (User) args[0];
         String justification = (String) args[1];

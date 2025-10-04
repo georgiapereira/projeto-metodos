@@ -33,6 +33,19 @@ public class FileUserRepository implements UserRepository {
     }
 
     @Override
+    public void setActiveUsers(List<User> activeUsers){
+        try (FileOutputStream fileOutputStream = new FileOutputStream(userPath)){
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(activeUsers);
+            objectOutputStream.flush();
+            objectOutputStream.close();
+        } catch (Exception e) {
+            logger.error("Erro de escrita de arquivo", e);
+            throw new RuntimeException("Falha na criação de arquivo", e);
+        }
+    }
+
+    @Override
     public List<DeletedUser> getAllDeletedUsers() {
         try (FileInputStream fileInputStream = new FileInputStream(deletedUserPath)) {
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
@@ -48,6 +61,19 @@ public class FileUserRepository implements UserRepository {
     }
 
     @Override
+    public void setDeletedUsers(List<DeletedUser> deletedUsers){
+        try (FileOutputStream fileOutputStream = new FileOutputStream(deletedUserPath)){
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(deletedUsers);
+            objectOutputStream.flush();
+            objectOutputStream.close();
+        } catch (Exception e) {
+            logger.error("Erro de escrita de arquivo", e);
+            throw new RuntimeException("Falha na criação de arquivo");
+        }
+    }
+
+    @Override
     public void addUser(User user) throws UserException {
         List<User> activeUsers = getAllActiveUsers();
         for (User existingUser: activeUsers) {
@@ -58,15 +84,7 @@ public class FileUserRepository implements UserRepository {
 
         activeUsers.add(user);
 
-        try (FileOutputStream fileOutputStream = new FileOutputStream(userPath)){
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(activeUsers);
-            objectOutputStream.flush();
-            objectOutputStream.close();
-        } catch (Exception e) {
-            logger.error("Erro de escrita de arquivo", e);
-            throw new RuntimeException("Falha na criação de arquivo", e);
-        }
+        setActiveUsers(activeUsers);
     }
 
     @Override
@@ -89,15 +107,7 @@ public class FileUserRepository implements UserRepository {
         List<DeletedUser> deletedUsers = getAllDeletedUsers();
         deletedUsers.add(deletedUser);
 
-        try (FileOutputStream fileOutputStream = new FileOutputStream(deletedUserPath)){
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(deletedUsers);
-            objectOutputStream.flush();
-            objectOutputStream.close();
-        } catch (Exception e) {
-            logger.error("Erro de escrita de arquivo", e);
-            throw new RuntimeException("Falha na criação de arquivo");
-        }
+        setDeletedUsers(deletedUsers);
     }
 
     @Override
