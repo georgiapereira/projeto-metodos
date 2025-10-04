@@ -3,6 +3,8 @@ package src;
 import src.controller.ControllerFacadeSingleton;
 import src.controller.ReviewController;
 import src.controller.UserController;
+import src.service.CardapioService;
+import src.service.PedidoService;
 import src.service.RAMReviewRepository;
 import src.service.RAMUserRepository;
 import src.service.ReviewRepository;
@@ -26,7 +28,7 @@ public class main {
         ReviewRepository reviewRepository;
         UserRepository userRepository;
 
-        if (confirmation.equals("s")) {
+        if (confirmation.equalsIgnoreCase("s")) {
             reviewRepository = new RAMReviewRepository();
             userRepository = new RAMUserRepository();
         } else {
@@ -43,6 +45,10 @@ public class main {
         UserView userView = new UserView();
         ReviewView reviewView = new ReviewView();
 
+        //instanciando os serviços para cardápio e pedidos
+        CardapioService cardapioService = new CardapioService();
+        PedidoService pedidoService = new PedidoService();
+
         boolean running = true;
 
         while (running) {
@@ -54,6 +60,9 @@ public class main {
             System.out.println("5. Listar Usuários Excluídos");
             System.out.println("6. Excluir um Usuário");
             System.out.println("7. Mostrar número total de entidades cadastradas");
+            System.out.println("8. Ver Cardápio do Restaurante");
+            System.out.println("9. Fazer Pedido (Item do Cardápio)");
+            System.out.println("10. Fazer Pedido (Personalizado)"); 
             System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
 
@@ -63,10 +72,9 @@ public class main {
                     case 1:
                         userView.manageUserCreation(scanner);
                         break;
-                    case 2: {
+                    case 2:
                         reviewView.manageLeaveReview(scanner);
                         break;
-                    }
                     case 3:
                         reviewView.manageViewReviewPanel();
                         break;
@@ -81,6 +89,15 @@ public class main {
                         break;
                     case 7:
                         System.out.printf("\nNúmero total de entidades cadastradas no sistema: %d\n", controllerFacade.getNumberOfEntities());
+                        break;
+                    case 8:
+                        cardapioService.gerenciarVisualizacaoCardapio();
+                        break;
+                    case 9:
+                        pedidoService.gerenciarPedidoPadrao(scanner);
+                        break;
+                    case 10:
+                        pedidoService.gerenciarPedidoPersonalizado(scanner);
                         break;
                     case 0:
                         running = false;
