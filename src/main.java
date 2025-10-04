@@ -9,6 +9,7 @@ import src.service.ReviewRepository;
 import src.service.UserRepository;
 import src.service.files.FileReviewRepository;
 import src.service.files.FileUserRepository;
+import src.view.ReportView;
 import src.view.ReviewView;
 import src.view.UserView;
 
@@ -29,9 +30,11 @@ public class main {
         if (confirmation.equals("s")) {
             reviewRepository = new RAMReviewRepository();
             userRepository = new RAMUserRepository();
+            System.out.println("Modo de persistência em RAM selecionado.");
         } else {
             reviewRepository = new FileReviewRepository();
             userRepository = new FileUserRepository();
+            System.out.println("Modo de persistência em arquivo selecionado.");
         }
 
         UserController userController = new UserController(userRepository);
@@ -42,6 +45,7 @@ public class main {
 
         UserView userView = new UserView();
         ReviewView reviewView = new ReviewView();
+        ReportView reportView = new ReportView(); // <-- INSTANCIAR A NOVA VIEW
 
         boolean running = true;
 
@@ -54,6 +58,7 @@ public class main {
             System.out.println("5. Listar Usuários Excluídos");
             System.out.println("6. Excluir um Usuário");
             System.out.println("7. Mostrar número total de entidades cadastradas");
+            System.out.println("8. Gerar Relatório"); // <-- NOVA OPÇÃO
             System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
 
@@ -82,6 +87,9 @@ public class main {
                     case 7:
                         System.out.printf("\nNúmero total de entidades cadastradas no sistema: %d\n", controllerFacade.getNumberOfEntities());
                         break;
+                    case 8: // <-- NOVO CASE
+                        reportView.manageReportGeneration(scanner);
+                        break;
                     case 0:
                         running = false;
                         break;
@@ -93,6 +101,7 @@ public class main {
                 System.out.println("ERRO: Por favor, digite um número.");
             }
         }
+        System.out.println("Sistema finalizado.");
         scanner.close();
     }
 }
