@@ -3,6 +3,8 @@ package src;
 import src.controller.ControllerFacadeSingleton;
 import src.controller.ReviewController;
 import src.controller.UserController;
+import src.service.CardapioService;
+import src.service.PedidoService;
 import src.service.RAMReviewRepository;
 import src.service.RAMUserRepository;
 import src.service.ReviewRepository;
@@ -27,7 +29,7 @@ public class main {
         ReviewRepository reviewRepository;
         UserRepository userRepository;
 
-        if (confirmation.equals("s")) {
+        if (confirmation.equalsIgnoreCase("s")) {
             reviewRepository = new RAMReviewRepository();
             userRepository = new RAMUserRepository();
             System.out.println("Modo de persistência em RAM selecionado.");
@@ -45,7 +47,10 @@ public class main {
 
         UserView userView = new UserView();
         ReviewView reviewView = new ReviewView();
-        ReportView reportView = new ReportView(); // <-- INSTANCIAR A NOVA VIEW
+        ReportView reportView = new ReportView();
+
+        CardapioService cardapioService = new CardapioService();
+        PedidoService pedidoService = new PedidoService();
 
         boolean running = true;
 
@@ -58,7 +63,10 @@ public class main {
             System.out.println("5. Listar Usuários Excluídos");
             System.out.println("6. Excluir um Usuário");
             System.out.println("7. Mostrar número total de entidades cadastradas");
-            System.out.println("8. Gerar Relatório"); // <-- NOVA OPÇÃO
+            System.out.println("8. Gerar Relatório"); 
+            System.out.println("9. Ver Cardápio do Restaurante");
+            System.out.println("10. Fazer Pedido (Item do Cardápio)");
+            System.out.println("11. Fazer Pedido (Personalizado)"); 
             System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
 
@@ -68,10 +76,9 @@ public class main {
                     case 1:
                         userView.manageUserCreation(scanner);
                         break;
-                    case 2: {
+                    case 2:
                         reviewView.manageLeaveReview(scanner);
                         break;
-                    }
                     case 3:
                         reviewView.manageViewReviewPanel();
                         break;
@@ -89,6 +96,15 @@ public class main {
                         break;
                     case 8: // <-- NOVO CASE
                         reportView.manageReportGeneration(scanner);
+                        break;
+                    case 9:
+                        cardapioService.gerenciarVisualizacaoCardapio();
+                        break;
+                    case 10:
+                        pedidoService.gerenciarPedidoPadrao(scanner);
+                        break;
+                    case 11:
+                        pedidoService.gerenciarPedidoPersonalizado(scanner);
                         break;
                     case 0:
                         running = false;
