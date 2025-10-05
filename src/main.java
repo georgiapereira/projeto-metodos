@@ -94,7 +94,7 @@ public class main {
                     case 7:
                         System.out.printf("\nNúmero total de entidades cadastradas no sistema: %d\n", controllerFacade.getNumberOfEntities());
                         break;
-                    case 8: // <-- NOVO CASE
+                    case 8:
                         reportView.manageReportGeneration(scanner);
                         break;
                     case 9:
