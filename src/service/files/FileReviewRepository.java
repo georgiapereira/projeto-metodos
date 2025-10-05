@@ -2,6 +2,8 @@ package src.service.files;
 
 import src.model.Review;
 import src.service.ReviewRepository;
+import src.util.LogManager;
+import src.util.Logger;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -14,11 +16,22 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class FileReviewRepository implements ReviewRepository {
+    private final Logger logger = LogManager.getLogger();
     private final String path = "db/review.ser";
 
     @Override
     public Map<String, List<Review>> getAllReviews() {
         return getReviewList().stream().collect(Collectors.groupingBy(Review::getUserLogin));
+    }
+
+    @Override
+    public void setReviews(Map<String, List<Review>> reviews) {
+        List<Review> reviewList = reviews
+                .values()
+                .stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+        setReviewList(reviewList);
     }
 
     private List<Review> getReviewList() {
@@ -33,17 +46,22 @@ public class FileReviewRepository implements ReviewRepository {
         }
     }
 
+    private void setReviewList(List<Review> reviews) {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(path)) {
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(reviews);
+            objectOutputStream.flush();
+            objectOutputStream.close();
+        } catch (Exception e) {
+            logger.error("Erro de escrita de arquivo", e);
+            throw new RuntimeException("Falha na criação de arquivo", e);
+        }
+    }
+
     @Override
     public void addReview(Review review) {
         List<Review> allReviews = getReviewList();
         allReviews.add(review);
-        try (FileOutputStream fileOutputStream = new FileOutputStream(path)) {
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(allReviews);
-            objectOutputStream.flush();
-            objectOutputStream.close();
-        } catch (Exception e) {
-            throw new RuntimeException("Falha na criação de arquivo");
-        }
+        setReviewList(allReviews);
     }
 }

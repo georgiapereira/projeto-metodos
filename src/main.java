@@ -11,6 +11,8 @@ import src.service.ReviewRepository;
 import src.service.UserRepository;
 import src.service.files.FileReviewRepository;
 import src.service.files.FileUserRepository;
+import src.util.LogManager;
+import src.util.Logger;
 import src.view.ReportView;
 import src.view.ReviewView;
 import src.view.UserView;
@@ -20,6 +22,8 @@ import java.util.Scanner;
 public class main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        Logger logger = LogManager.getLogger();
+        logger.info("Aplicação iniciada");
 
         System.out.println("### Aplicação de Gerenciamento e Feedback Iniciada ###");
         System.out.println("\nIniciando em modo de persistência de arquivo, deseja trocar para o modo de persistência em RAM?");
@@ -63,10 +67,11 @@ public class main {
             System.out.println("5. Listar Usuários Excluídos");
             System.out.println("6. Excluir um Usuário");
             System.out.println("7. Mostrar número total de entidades cadastradas");
-            System.out.println("8. Gerar Relatório"); 
+            System.out.println("8. Reverter última atualização");
+            System.out.println("8. Gerar Relatório");
             System.out.println("9. Ver Cardápio do Restaurante");
             System.out.println("10. Fazer Pedido (Item do Cardápio)");
-            System.out.println("11. Fazer Pedido (Personalizado)"); 
+            System.out.println("11. Fazer Pedido (Personalizado)");
             System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
 
@@ -92,7 +97,16 @@ public class main {
                         userView.manageUserDeletion(scanner);
                         break;
                     case 7:
-                        System.out.printf("\nNúmero total de entidades cadastradas no sistema: %d\n", controllerFacade.getNumberOfEntities());
+                        int nEntities = (int) controllerFacade.execute("getNumberOfEntities");
+                        System.out.printf("\nNúmero total de entidades cadastradas no sistema: %d\n", nEntities);
+                        break;
+                    case 8:
+                        boolean undoSuccessful = (boolean) controllerFacade.execute("undo");
+                        if(undoSuccessful){
+                            System.out.println("\nÚltima atualização revertida com sucesso!");
+                        }else{
+                            System.out.println("\nNão há atualizações para reverter");
+                        }
                         break;
                     case 8:
                         reportView.manageReportGeneration(scanner);
@@ -117,7 +131,7 @@ public class main {
                 System.out.println("ERRO: Por favor, digite um número.");
             }
         }
-        System.out.println("Sistema finalizado.");
         scanner.close();
+        logger.info("Aplicação encerrada");
     }
 }

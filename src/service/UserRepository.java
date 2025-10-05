@@ -1,5 +1,7 @@
 package src.service;
 
+import org.jetbrains.annotations.NotNull;
+import src.controller.memento.Memento;
 import src.model.DeletedUser;
 import src.model.User;
 import src.model.exception.UserException;
@@ -9,7 +11,10 @@ import java.util.List;
 
 public interface UserRepository {
     List<User> getAllActiveUsers();
+    void setActiveUsers(List<User> activeUsers);
+
     List<DeletedUser> getAllDeletedUsers();
+    void setDeletedUsers(List<DeletedUser> deletedUsers);
 
     /**
      * Adiciona um novo usuário à lista de usuários ativos.
