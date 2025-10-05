@@ -12,7 +12,7 @@ public class DeletedUsersReportGenerator extends ReportGenerator {
 
     @Override
     protected String getContent() {
-        List<DeletedUser> deletedUsers = controllerFacade.getDeletedUsers();
+        List<DeletedUser> deletedUsers = (List<DeletedUser>) controllerFacade.execute("getDeletedUsers");
         if (deletedUsers.isEmpty()) {
             return "Nenhum usuário excluído encontrado no sistema.\n";
         }

@@ -1,6 +1,10 @@
 package src.controller;
 
 import src.controller.command.*;
+import src.service.report.ActiveUsersReportGenerator;
+import src.service.report.DeletedUsersReportGenerator;
+import src.service.report.ReportGenerator;
+import src.service.report.ReviewsReportGenerator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,8 +50,8 @@ public class ControllerFacadeSingleton {
  * "getAllReviews" <br> returns: Map (String -> [Review])<p>
  * "login" <br> returns: User <br> args: login:String password:String<p>
  * "deleteUser" <br> args: user:User justification:String rating:String<p>
- * "getAllActiveUsers" <br> returns: [User]<p>
- * "getAllDeletedUsers" <br> returns: [DeletedUser]<p>
+ * "getActiveUsers" <br> returns: [User]<p>
+ * "getDeletedUsers" <br> returns: [DeletedUser]<p>
  * "getNumberOfEntities" <br> returns: int<p>
  * "undo" <br> returns: boolean
 */

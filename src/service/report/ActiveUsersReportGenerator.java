@@ -12,7 +12,7 @@ public class ActiveUsersReportGenerator extends ReportGenerator {
 
     @Override
     protected String getContent() {
-        List<User> activeUsers = controllerFacade.getActiveUsers();
+        List<User> activeUsers = (List<User>) controllerFacade.execute("getActiveUsers");
         if (activeUsers.isEmpty()) {
             return "Nenhum usuário ativo encontrado no sistema.\n";
         }

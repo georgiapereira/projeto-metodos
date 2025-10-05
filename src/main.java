@@ -67,11 +67,11 @@ public class main {
             System.out.println("5. Listar Usuários Excluídos");
             System.out.println("6. Excluir um Usuário");
             System.out.println("7. Mostrar número total de entidades cadastradas");
-            System.out.println("8. Reverter última atualização");
-            System.out.println("8. Gerar Relatório");
-            System.out.println("9. Ver Cardápio do Restaurante");
-            System.out.println("10. Fazer Pedido (Item do Cardápio)");
-            System.out.println("11. Fazer Pedido (Personalizado)");
+            System.out.println("8. Reverter última atualização de usuário ou avaliação");
+            System.out.println("9. Gerar Relatório");
+            System.out.println("10. Ver Cardápio do Restaurante");
+            System.out.println("11. Fazer Pedido (Item do Cardápio)");
+            System.out.println("12. Fazer Pedido (Personalizado)");
             System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
 
@@ -108,16 +108,16 @@ public class main {
                             System.out.println("\nNão há atualizações para reverter");
                         }
                         break;
-                    case 8:
+                    case 9:
                         reportView.manageReportGeneration(scanner);
                         break;
-                    case 9:
+                    case 10:
                         cardapioService.gerenciarVisualizacaoCardapio();
                         break;
-                    case 10:
+                    case 11:
                         pedidoService.gerenciarPedidoPadrao(scanner);
                         break;
-                    case 11:
+                    case 12:
                         pedidoService.gerenciarPedidoPersonalizado(scanner);
                         break;
                     case 0:

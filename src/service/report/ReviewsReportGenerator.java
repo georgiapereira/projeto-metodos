@@ -13,7 +13,7 @@ public class ReviewsReportGenerator extends ReportGenerator {
 
     @Override
     protected String getContent() {
-        Map<String, List<Review>> allReviews = controllerFacade.getAllReviews();
+        Map<String, List<Review>> allReviews = (Map<String, List<Review>>) controllerFacade.execute("getAllReviews");
         if (allReviews.isEmpty()) {
             return "Nenhuma avaliação encontrada no sistema.\n";
         }
